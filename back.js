@@ -1,5 +1,10 @@
 let boxes = document.querySelectorAll(".box");
 let btn=document.querySelector("#r1");
+let wincon = document.querySelector(".win");
+let newbtn=document.querySelector("#r2");
+let mesg = document.querySelector("#msg");
+
+let turnO=true;
 
 const Winpatt = [
     [0,1,2],
@@ -13,7 +18,14 @@ const Winpatt = [
 
 ]
 
-let turnO=true;
+
+const resetgame=()=>{
+    turnO=true;
+    enableboxes();
+    wincon.classList.add("hide");
+};
+
+
 
 boxes.forEach((box) => {
     
@@ -28,8 +40,51 @@ boxes.forEach((box) => {
             box.innerText="X";
             turnO=true;
         }
+        box.disabled=true;
         
+        checkwinner();
     });
     
 }
 );
+const displayWinner= (winner) =>{
+   mesg.innerText = `Congratulations Winner is ${winner}`;
+   wincon.classList.remove("hide");
+   disableboxes();
+};
+
+const disableboxes =() =>{
+    for(let box of boxes)
+    {
+        box.disabled=true;
+    }
+};
+
+const enableboxes = ()=>{
+      for(let box of boxes)
+      {
+        box.disabled=false;
+        box.innerText="";
+      }
+};
+
+const checkwinner =() => {
+
+    for(let pat of Winpatt)
+        {
+            let pos1=boxes[pat[0]].innerText;
+            let pos2=boxes[pat[1]].innerText;
+            let pos3=boxes[pat[2]].innerText;
+
+            if(pos1 != "" && pos2!="" && pos3!="")
+            {
+                if(pos1===pos2 && pos2===pos3)
+                {
+                    displayWinner(pos1);
+                }
+            }
+        }
+};
+
+newbtn.addEventListener("click",resetgame);
+btn.addEventListener("click",resetgame);
